@@ -485,6 +485,53 @@ function More({navigation}: any) {
             />
           </TouchableOpacity>
          
+         {/* pdf ciwer */}
+         {/* <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate('PdfViewer')}
+            style={{
+              paddingVertical: 15,
+              borderBottomWidth: 1,
+              borderBottomColor: '#eee',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <View
+              style={{
+                width: '90%',
+                flexDirection: 'row',
+                gap: 15,
+                alignItems: 'center',
+              }}>
+              <View
+                style={{
+                  backgroundColor: 'gray',
+                  padding: 10,
+                  borderRadius: 10,
+                }}>
+                <Image
+                  source={require('../../Assets/Images/faq.png')}
+                  style={{height: 15, width: 15}}
+                />
+              </View>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: '600',
+                  color: Theme.black,
+                  fontFamily: 'Circular Std Book',
+                }}>
+                pdf viwer
+              </Text>
+            </View>
+            <Image
+              source={require('../../Assets/Images/right.png')}
+              style={{width: 20, height: 20}}
+              resizeMode="contain"
+            />
+          </TouchableOpacity> */}
+
           {/*Logout */}
           <TouchableOpacity
             onPress={handleFilterPress}

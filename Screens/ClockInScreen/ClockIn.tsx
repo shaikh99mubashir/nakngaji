@@ -14,7 +14,7 @@ import {
 import {Theme} from '../../constant/theme';
 import Header from '../../Component/Header';
 import {launchCamera} from 'react-native-image-picker';
-// import Geolocation from '@react-native-community/geolocation';
+import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
 import {Base_Uri} from '../../constant/BaseUri';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -31,19 +31,19 @@ function ClockIn({navigation, route}: any) {
 
 
   
-  // const getCurrentLocation = () => {
-  //   Geolocation.getCurrentPosition(e =>
-  //     setCurrentLocation({
-  //       ...currentLocation,
-  //       latitude: e.coords.latitude,
-  //       longitude: e.coords.longitude,
-  //     }),
-  //   );
-  // };
+  const getCurrentLocation = () => {
+    Geolocation.getCurrentPosition(e =>
+      setCurrentLocation({
+        ...currentLocation,
+        latitude: e.coords.latitude,
+        longitude: e.coords.longitude,
+      }),
+    );
+  };
 
-  // useEffect(() => {
-  //   getCurrentLocation();
-  // }, []);
+  useEffect(() => {
+    getCurrentLocation();
+  }, []);
   checkMultiple([PERMISSIONS.IOS.CAMERA])
   .then((statuses) => {
     console.log('Camera then', statuses[PERMISSIONS.IOS.CAMERA]);

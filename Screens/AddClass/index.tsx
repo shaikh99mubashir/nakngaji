@@ -27,6 +27,8 @@ import CustomLoader from '../../Component/CustomLoader';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Toast from 'react-native-toast-message';
+import Clock from '../../SVGs/Clock';
+import Schedule from '../../SVGs/Schedule';
 
 function AddClass({navigation}: any) {
   const [student, setStudent] = useState([]);
@@ -218,6 +220,7 @@ function AddClass({navigation}: any) {
   };
 
   const setClassDate = (mode: any, index: Number, startTime?: Boolean) => {
+    
     if (startTime) {
       setClickedStartTime(true);
     }
@@ -329,10 +332,11 @@ function AddClass({navigation}: any) {
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={() => setClassDate('date', index)}>
-              <Image
+              {/* <Image
                 source={require('../../Assets/Images/ScheduleIcon.png')}
                 style={{width: 20, height: 20}}
-              />
+              /> */}
+              <Schedule width={20} height={20}/>
             </TouchableOpacity>
           </View>
         </View>
@@ -372,10 +376,11 @@ function AddClass({navigation}: any) {
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={() => setClassDate('time', index, true)}>
-                <Image
+                {/* <Image
                   source={require('../../Assets/Images/ClockiconCopy.png')}
                   style={{width: 20, height: 20}}
-                />
+                /> */}
+                <Clock width={20} height={20}/>
               </TouchableOpacity>
             </View>
           </View>
@@ -415,10 +420,11 @@ function AddClass({navigation}: any) {
                 activeOpacity={0.8}
                 // onPress={() => setClassDate('time', index)}
               >
-                <Image
+                {/* <Image
                   source={require('../../Assets/Images/ClockiconCopy.png')}
                   style={{width: 20, height: 20}}
-                />
+                /> */}
+                <Clock width={20} height={20}/>
               </TouchableOpacity>
             </View>
           </View>

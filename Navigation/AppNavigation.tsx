@@ -40,6 +40,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Base_Uri } from '../constant/BaseUri';
 import axios from 'axios';
 import TutorDetailsContext from '../context/tutorDetailsContext';
+import PdfViewer from '../Screens/PdfViwer';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -362,6 +363,7 @@ const AppNavigation = () => {
         <Stack.Screen name="ClassTimerCount" component={ClassTimerCount} />
         <Stack.Screen name="ReportSubmissionHistory" component={ReportSubmissionHistory} />
         <Stack.Screen name="ScheduleSuccessfully" component={ScheduleSuccessfully} />
+        <Stack.Screen name="PdfViewer" component={PdfViewer} />
       </Stack.Navigator>
         <Toast/>
     </NavigationContainer>

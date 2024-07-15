@@ -42,7 +42,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 // import { ScrollView } from "react-native-gesture-handler"
 
 function Schedule({navigation, route}: any) {
-  let data = route.params;
+  let data = route?.params;
 
   let focus = useIsFocused();
 

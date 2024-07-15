@@ -33,7 +33,9 @@ const ScheduleSuccessfully = ({navigation}:any) => {
               }}>
               <TouchableOpacity
                activeOpacity={0.8}
-                onPress={() =>  navigation.replace("Main")}
+                onPress={() =>  navigation.replace('Main', {
+                  screen: 'Home',
+                })}
                 style={{
                   backgroundColor: Theme.white,
                   padding: 10,
