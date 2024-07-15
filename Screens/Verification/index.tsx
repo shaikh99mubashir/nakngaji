@@ -20,9 +20,9 @@ import {
 import { Theme } from '../../constant/theme';
 import { Base_Uri } from '../../constant/BaseUri';
 import axios from 'axios';
-// import messaging from '@react-native-firebase/messaging';
+import messaging from '@react-native-firebase/messaging';
 import CustomLoader from '../../Component/CustomLoader';
-// import { getFcmToken } from '../../src/utils/fcmHelper';
+import { getFcmToken } from '../../src/utils/fcmHelper';
 import Toast from 'react-native-toast-message';
 const Verification = ({ navigation, route }: any) => {
   let data = route.params;
@@ -39,10 +39,10 @@ const Verification = ({ navigation, route }: any) => {
   const Verify = () => {
     const sendDeviceTokenToDatabase = async (tutorId: any) => {
       try {
-        // let token = await messaging().getToken();
+        let token = await messaging().getToken();
         let formData = new FormData();
         formData.append('tutor_id', tutorId);
-        // formData.append('device_token', token);
+        formData.append('device_token', token);
 
         axios
           .post(`${Base_Uri}api/getTutorDeviceToken`, formData, {
@@ -111,7 +111,7 @@ const Verification = ({ navigation, route }: any) => {
           setLoading(false);
           let mydata = JSON.stringify(data);
           AsyncStorage.setItem('loginAuth', mydata);
-          // sendDeviceTokenToDatabase(data.tutorID)
+          sendDeviceTokenToDatabase(data.tutorID)
           axios
             .get(`${Base_Uri}getTutorDetailByID/${data?.tutorID}`)
             .then((res) => {
