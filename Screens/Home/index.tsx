@@ -39,6 +39,8 @@ import Student from '../../SVGs/Student';
 import Clock from '../../SVGs/Clock';
 import Schedule from '../../SVGs/Schedule';
 import Toast from 'react-native-toast-message';
+import notifee, {EventType} from '@notifee/react-native';
+import messaging from '@react-native-firebase/messaging';
 function Home({ navigation, route }: any) {
   let key = route.key;
 
@@ -1005,6 +1007,110 @@ function Home({ navigation, route }: any) {
     getTutorDetailss();
   }, [focus, refreshing]);
 
+  const [navigateTo, setNavigateTo] = React.useState<any>('')
+  const navigateWithNotification= (screenName:any) =>{
+    console.log('navigateWithNotification running',screenName);
+    console.log('navigateTo',navigateTo);
+
+    // navigation.naigate(screenName)
+  }
+  function registerListenerWithFCM() {
+  const unsubscribe = messaging().onMessage(async remoteMessage => {
+    console.log('onMessage Received : ', JSON.stringify(remoteMessage));
+    if (
+      remoteMessage?.notification?.title &&
+      remoteMessage?.notification?.body
+    ) {
+      onDisplayNotification(
+        remoteMessage.notification?.title,
+        remoteMessage.notification?.body,
+        remoteMessage?.data,
+      );
+    }
+  });
+  notifee.onForegroundEvent(({type, detail}) => {
+    switch (type) {
+      case EventType.DISMISSED:
+        console.log('User dismissed notification', detail.notification);
+        break;
+      case EventType.PRESS:
+        // console.log('User pressed notification', detail.notification?.data);
+        // if (detail?.notification?.data?.clickAction) {
+        //   onNotificationClickActionHandling(
+        //     detail.notification.data.clickAction
+        //   );
+        // }
+        console.log('set to',detail.notification?.data?.screen);
+        // setNavigateTo(detail?.notification?.data)
+        if (detail.notification?.data?.screen == "jobTicket") {
+          navigation.navigate('Filter')
+          
+        }
+        break;
+    }
+  });
+ 
+  
+
+  messaging().onNotificationOpenedApp(async remoteMessage => {
+    console.log(
+      'onNotificationOpenedApp Received',
+      JSON.stringify(remoteMessage),
+    );
+    // if (remoteMessage?.data?.clickAction) {
+    //   onNotificationClickActionHandling(remoteMessage.data.clickAction);
+    // }
+  });
+  // Check whether an initial notification is available
+  messaging()
+    .getInitialNotification()
+    .then(remoteMessage => {
+      if (remoteMessage) {
+        console.log(
+          'Notification caused app to open from quit state:',
+          remoteMessage.notification,
+        );
+      }
+    });
+
+  return unsubscribe;
+}
+
+useEffect(()=>{
+  // registerListenerWithFCM()
+  console.log("working");
+  
+  const unsubscribe = registerListenerWithFCM();
+  return unsubscribe;
+},[focus])
+
+async function onDisplayNotification(title:any, body:any, data:any) {
+  console.log('onDisplayNotification Adnan: ', JSON.stringify(data));
+
+  // Request permissions (required for iOS)
+  await notifee.requestPermission();
+  // Create a channel (required for Android)
+  const channelId = await notifee.createChannel({
+    id: 'default',
+    name: 'Default Channel',
+  });
+
+  // Display a notification
+  await notifee.displayNotification({
+    title: title,
+    body: body,
+    data: data,
+    android: {
+      channelId,
+      // pressAction is needed if you want the notification to open the app when pressed
+      pressAction: {
+        id: 'default',
+      },
+    },
+  });
+}
+
+
   return (
     <View style={{ height: '100%' }}>
       <CustomLoader visible={!cancelledHours} />
@@ -1059,8 +1165,8 @@ function Home({ navigation, route }: any) {
                     }}>
                     <Text
                       style={[styles.text, { fontSize: 10, color: Theme.white }]}>
-                      {notification.length + scheduleNotification.length > 0
-                        ? notification.length + scheduleNotification.length
+                      {notification?.length + scheduleNotification?.length > 0
+                        ? notification?.length + scheduleNotification?.length
                         : 0}
                     </Text>
                   </View>

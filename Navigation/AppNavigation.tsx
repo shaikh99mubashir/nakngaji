@@ -1,6 +1,6 @@
 import {Image, StyleSheet, Text, View} from 'react-native';
 import React, { useContext, useEffect } from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Splash from '../Screens/Splash';
@@ -331,9 +331,107 @@ function BottomNavigation({navigation,route}: any) {
 
   );
 }
+import notifee, {EventType} from '@notifee/react-native';
+import messaging from '@react-native-firebase/messaging';
 const AppNavigation = () => {
+  const navigateRef :any = React.createRef();
+  const [navigateTo, setNavigateTo] = React.useState<any>('')
+  function registerListenerWithFCM() {
+  const unsubscribe = messaging().onMessage(async remoteMessage => {
+    console.log('onMessage Received : ', JSON.stringify(remoteMessage));
+    if (
+      remoteMessage?.notification?.title &&
+      remoteMessage?.notification?.body
+    ) {
+      onDisplayNotification(
+        remoteMessage.notification?.title,
+        remoteMessage.notification?.body,
+        remoteMessage?.data,
+      );
+    }
+  });
+  notifee.onForegroundEvent(({type, detail}) => {
+    switch (type) {
+      case EventType.DISMISSED:
+        console.log('User dismissed notification', detail.notification);
+        break;
+      case EventType.PRESS:
+        // console.log('User pressed notification', detail.notification?.data);
+        // if (detail?.notification?.data?.clickAction) {
+        //   onNotificationClickActionHandling(
+        //     detail.notification.data.clickAction
+        //   );
+        // }
+        console.log('set to',detail.notification?.data);
+        setNavigateTo(detail?.notification?.data)
+        // if (detail.notification?.data?.screen === "jobTicket") {
+        //   // navigation.navigate('Filter');
+        //   // navigation.navigate('Main', { screen: 'jobTicket' });
+
+        // }
+        break;
+    }
+  });
+
+  messaging().onNotificationOpenedApp(async remoteMessage => {
+    console.log(
+      'onNotificationOpenedApp Received',
+      JSON.stringify(remoteMessage),
+    );
+    // if (remoteMessage?.data?.clickAction) {
+    //   onNotificationClickActionHandling(remoteMessage.data.clickAction);
+    // }
+  });
+  // Check whether an initial notification is available
+  messaging()
+    .getInitialNotification()
+    .then(remoteMessage => {
+      if (remoteMessage) {
+        console.log(
+          'Notification caused app to open from quit state:',
+          remoteMessage.notification,
+        );
+      }
+    });
+
+  return unsubscribe;
+}
+
+// useEffect(()=>{
+//   // registerListenerWithFCM()
+//   const unsubscribe = registerListenerWithFCM();
+//   return unsubscribe;
+// },[])
+
+async function onDisplayNotification(title:any, body:any, data:any) {
+  console.log('onDisplayNotification Adnan: ', JSON.stringify(data));
+
+  // Request permissions (required for iOS)
+  await notifee.requestPermission();
+  // Create a channel (required for Android)
+  const channelId = await notifee.createChannel({
+    id: 'default',
+    name: 'Default Channel',
+  });
+
+  // Display a notification
+  await notifee.displayNotification({
+    title: title,
+    body: body,
+    data: data,
+    android: {
+      channelId,
+      // pressAction is needed if you want the notification to open the app when pressed
+      pressAction: {
+        id: 'default',
+      },
+    },
+  });
+}
+
   return (
-    <NavigationContainer>
+
+    <NavigationContainer ref={navigateRef}>
       <Stack.Navigator
         initialRouteName="Splash"
         screenOptions={{headerShown: false, animation: 'slide_from_right'}}>
@@ -365,6 +463,7 @@ const AppNavigation = () => {
         <Stack.Screen name="ScheduleSuccessfully" component={ScheduleSuccessfully} />
         <Stack.Screen name="PdfViewer" component={PdfViewer} />
       </Stack.Navigator>
+      
         <Toast/>
     </NavigationContainer>
   );

@@ -442,10 +442,10 @@ const ReportSubmission = ({ navigation, route }: any): any => {
   ];
   const knowledge = [
     {
-      option: ' Remember most concepts with minimal errors.',
+      option: 'Remember most concepts with minimal errors.',
     },
     {
-      option: 'Remember basic concepts after receiving guidance. ',
+      option: 'Remember basic concepts after receiving guidance.',
     },
     {
       option: 'Struggles to remember concepts without a lot of help.',

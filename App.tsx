@@ -17,7 +17,6 @@ import { getFcmToken, registerListenerWithFCM } from './src/utils/fcmHelper';
 const App = () => {
   useEffect(() => {
     IdleTimerManager.setIdleTimerDisabled(true);
-
     return () => IdleTimerManager.setIdleTimerDisabled(false);
   }, []);
   useEffect(() => {

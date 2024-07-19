@@ -96,7 +96,7 @@ export function registerListenerWithFCM() {
         console.log('User dismissed notification', detail.notification);
         break;
       case EventType.PRESS:
-        console.log('User pressed notification', detail.notification);
+        console.log('User pressed notification', detail.notification?.data);
         // if (detail?.notification?.data?.clickAction) {
         //   onNotificationClickActionHandling(
         //     detail.notification.data.clickAction
